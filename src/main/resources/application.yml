@@ -1,19 +1,49 @@
-server:
-    port: 8080
-
 spring:
     application:
-        name: api-gateway
-
+        name: gateway-service
     cloud:
         consul:
             host: localhost
             port: 8500
             discovery:
                 enabled: true
-
+                instance-id: ${spring.application.name}:${random.value}
+                health-check-path: /actuator/health
+                health-check-interval: 15s
         gateway:
             discovery:
                 locator:
                     enabled: true
                     lower-case-service-id: true
+            routes:
+                - id: olive-insurance-administration-service
+                  uri: lb://olive-insurance-administration-service
+                  predicates:
+                      - Path=/admin/**
+                  filters:
+                      - RewritePath=/admin/(?<segment>.*), /${segment}
+                - id: olive-insurance-auth-service
+                  uri: lb://olive-insurance-auth-service
+                  predicates:
+                      - Path=/auth/**
+                  filters:
+                      - RewritePath=/auth/(?<segment>.*), /${segment}
+                - id: olive-insurance-attest-service
+                  uri: lb://olive-insurance-attest-service
+                  predicates:
+                      - Path=/attest/**
+                  filters:
+                      - RewritePath=/attest/(?<segment>.*), /${segment}
+                - id: olive-insurance-settings-service
+                  uri: lb://olive-insurance-settings-service
+                  predicates:
+                      - Path=/params/**
+                  filters:
+                      - RewritePath=/params/(?<segment>.*), /${segment}
+server:
+    port: 8080
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,gateway
