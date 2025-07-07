@@ -11,35 +11,37 @@ spring:
                 health-check-path: /actuator/health
                 health-check-interval: 15s
         gateway:
-            discovery:
-                locator:
-                    enabled: true
-                    lower-case-service-id: true
             routes:
                 - id: olive-insurance-administration-service
                   uri: lb://olive-insurance-administration-service
                   predicates:
                       - Path=/admin/**
                   filters:
-                      - RewritePath=/admin/(?<segment>.*), /${segment}
+                      - RewritePath=/admin/(?<segment>.*), /api/v1/${segment}
                 - id: olive-insurance-auth-service
                   uri: lb://olive-insurance-auth-service
                   predicates:
                       - Path=/auth/**
                   filters:
-                      - RewritePath=/auth/(?<segment>.*), /${segment}
+                      - RewritePath=/auth/(?<segment>.*), /api/v1/${segment}
                 - id: olive-insurance-attest-service
                   uri: lb://olive-insurance-attest-service
                   predicates:
-                      - Path=/attest/**
+                      - Path=/attestations/**
                   filters:
-                      - RewritePath=/attest/(?<segment>.*), /${segment}
+                      - RewritePath=/attestations/(?<segment>.*), /api/v1/${segment}
                 - id: olive-insurance-settings-service
                   uri: lb://olive-insurance-settings-service
                   predicates:
-                      - Path=/params/**
+                      - Path=/settings/**
                   filters:
-                      - RewritePath=/params/(?<segment>.*), /${segment}
+                      - RewritePath=/settings/(?<segment>.*), /api/v1/${segment}
+                - id: olive-insurance-exploitation-service
+                  uri: lb://olive-insurance-exploitation-service
+                  predicates:
+                      - Path=/exploitation/**
+                  filters:
+                      - RewritePath=/exploitation/(?<segment>.*), /api/v1/${segment}
 server:
     port: 8080
 management:
