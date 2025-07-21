@@ -3,7 +3,7 @@ name: Build and Deploy Spring Boot App
 on:
   push:
     branches:
-      - dev-fix_cors
+      - dev
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/dev-fix_cors' }}
+    if: ${{ github.ref == 'refs/heads/dev' }}
 
     steps:
       - name: Download JAR artifact
@@ -63,7 +63,7 @@ jobs:
   restart:
     needs: deploy
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/dev-fix_cors' }}
+    if: ${{ github.ref == 'refs/heads/dev' }}
 
     steps:
       - name: Set up SSH
