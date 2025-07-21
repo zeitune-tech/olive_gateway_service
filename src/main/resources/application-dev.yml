@@ -56,7 +56,7 @@ spring:
                     - Path=/{segment}**
                   filters:
                     - SetStatus=404
-            globalcors: # Corrected property name (no hyphen)
+            globalcors:
                 cors-configurations:
                     '[/**]':
                         allowed-origins:

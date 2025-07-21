@@ -57,7 +57,7 @@ jobs:
       - name: Run deploy script on server
         run: |
           ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-            ~/bin/deploy-service.sh administration-service /var/www/dev_olive_services/dev_olive_gateway_service
+            ~/bin/deploy-service.sh gateway-service /var/www/dev_olive_services/dev_olive_gateway_service
           "
 
   restart:
