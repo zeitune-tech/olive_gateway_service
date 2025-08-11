@@ -37,18 +37,24 @@ spring:
                       - Path=/settings/**
                   filters:
                       - RewritePath=/settings/(?<segment>.*), /api/v1/${segment}
-#                - id: dev-olive-insurance-attest-service
-#                  uri: lb://olive-insurance-attest-service
-#                  predicates:
-#                      - Path=/attestations/**
-#                  filters:
-#                      - RewritePath=/attestations/(?<segment>.*), /api/v1/${segment}
-#                - id: dev-olive-insurance-exploitation-service
-#                  uri: lb://olive-insurance-exploitation-service
-#                  predicates:
-#                      - Path=/exploitation/**
-#                  filters:
-#                      - RewritePath=/exploitation/(?<segment>.*), /api/v1/${segment}
+                - id: dev-olive-insurance-princing-service
+                  uri: lb://dev-olive-insurance-princing-service
+                  predicates:
+                    - Path=/princing/**
+                  filters:
+                    - RewritePath=/princing/(?<segment>.*), /api/v1/${segment}
+                - id: dev-olive-insurance-attestation-service
+                  uri: lb://olive-insurance-attestation-service
+                  predicates:
+                      - Path=/attestations/**
+                  filters:
+                      - RewritePath=/attestations/(?<segment>.*), /api/v1/${segment}
+                - id: dev-olive-insurance-exploitation-service
+                  uri: lb://olive-insurance-exploitation-service
+                  predicates:
+                      - Path=/exploitation/**
+                  filters:
+                      - RewritePath=/exploitation/(?<segment>.*), /api/v1/${segment}
                     # Nouvelle route pour les endpoints problématiques
                 - id: catch-all-route
                   uri: no://op  # Route factice
