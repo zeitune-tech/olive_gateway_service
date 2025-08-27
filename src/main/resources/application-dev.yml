@@ -50,11 +50,11 @@ spring:
                   filters:
                       - RewritePath=/attestations/(?<segment>.*), /api/v1/${segment}
                 - id: dev-olive-insurance-exploitation-service
-                  uri: lb://olive-insurance-exploitation-service
+                  uri: lb://dev-olive-insurance-exploitation-service
                   predicates:
-                      - Path=/exploitation/**
+                    - Path=/exploitation/**
                   filters:
-                      - RewritePath=/exploitation/(?<segment>.*), /api/v1/${segment}
+                    - RewritePath=/exploitation/(?<segment>.*), /api/v1/${segment}
                     # Nouvelle route pour les endpoints problématiques
                 - id: catch-all-route
                   uri: no://op  # Route factice
