@@ -1,71 +1,66 @@
 server:
-  port: 8180
+  port: 8280
+
 management:
   endpoints:
     web:
       exposure:
         include: health,info,gateway
+
 spring:
   application:
-    name: dev-olive-insurance-gateway-service
+    name: recipe-olive-insurance-gateway-service
   cloud:
     consul:
-      host: ${SPRING_CLOUD_CONSUL_HOST}
-      port: ${SPRING_CLOUD_CONSUL_PORT}
+      host: ${SPRING_CLOUD_CONSUL_HOST:localhost}
+      port: ${SPRING_CLOUD_CONSUL_PORT:8500}
       discovery:
         enabled: true
-        instance-id: ${spring.application.name}-8180
+        instance-id: recipe-olive-insurance-gateway-service-8280
         health-check-path: /actuator/health
         health-check-interval: 15s
     gateway:
       routes:
-        - id: dev-olive-insurance-administration-service
-          uri: lb://dev-olive-insurance-administration-service
+        - id: recipe-olive-insurance-administration-service
+          uri: lb://recipe-olive-insurance-administration-service
           predicates:
             - Path=/admin/**
           filters:
             - RewritePath=/admin/(?<segment>.*), /api/v1/${segment}
-        - id: dev-olive-insurance-auth-service
-          uri: lb://dev-olive-insurance-auth-service
+        - id: recipe-olive-insurance-auth-service
+          uri: lb://recipe-olive-insurance-auth-service
           predicates:
             - Path=/auth/**
           filters:
             - RewritePath=/auth/(?<segment>.*), /api/v1/${segment}
-        - id: dev-olive-insurance-settings-service
-          uri: lb://dev-olive-insurance-settings-service
+        - id: recipe-olive-insurance-settings-service
+          uri: lb://recipe-olive-insurance-settings-service
           predicates:
             - Path=/settings/**
           filters:
             - RewritePath=/settings/(?<segment>.*), /api/v1/${segment}
-        - id: dev-olive-insurance-pricing-service
-          uri: lb://dev-olive-insurance-pricing-service
+        - id: recipe-olive-insurance-pricing-service
+          uri: lb://recipe-olive-insurance-pricing-service
           predicates:
             - Path=/pricing/**
           filters:
             - RewritePath=/pricing/(?<segment>.*), /api/v1/${segment}
-        - id: dev-olive-insurance-attestation-service
-          uri: lb://olive-insurance-attestation-service
+        - id: recipe-olive-insurance-attestation-service
+          uri: lb://recipe-olive-insurance-attestation-service
           predicates:
             - Path=/attestations/**
           filters:
             - RewritePath=/attestations/(?<segment>.*), /api/v1/${segment}
-        - id: dev-olive-insurance-exploitation-service
-          uri: lb://dev-olive-insurance-exploitation-service
+        - id: recipe-olive-insurance-exploitation-service
+          uri: lb://recipe-olive-insurance-exploitation-service
           predicates:
             - Path=/exploitation/**
           filters:
             - RewritePath=/exploitation/(?<segment>.*), /api/v1/${segment}
-        - id: dev-olive-insurance-insured-service
-          uri: lb://dev-olive-insurance-insured-service
-          predicates:
-            - Path=/insured/**
-          filters:
-            - RewritePath=/insured/(?<segment>.*), /api/v1/${segment}
-        # Catch-all route for unmatched requests
         - id: catch-all-route
           uri: no://op
           predicates:
-            - Path=/**
+            - Path=/{segment}**
           filters:
             - SetStatus=404
       globalcors:
@@ -86,12 +81,9 @@ spring:
             max-age: 3600
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+
 logging:
   level:
-    org.springframework.boot.context.config: DEBUG
-    org.springframework.web.cors: DEBUG
-    org.springframework.cloud.gateway.handler.FilteringWebHandler: DEBUG
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.web.reactive: DEBUG
-    org.springframework.http.codec: DEBUG
-    reactor.netty: DEBUG
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web.reactive: INFO
+    reactor.netty: INFO
