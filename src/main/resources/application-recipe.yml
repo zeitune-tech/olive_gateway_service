@@ -68,7 +68,7 @@ spring:
           '[/**]':
             allowed-origins:
               - "http://localhost:4200"
-              - "https://dev.olive.zeitune.tech"
+              - "https://recipe.olive.zeitune.tech"
             allowed-methods:
               - GET
               - POST
